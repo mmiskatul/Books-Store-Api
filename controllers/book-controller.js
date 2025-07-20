@@ -37,7 +37,7 @@ const getSingleBookByID = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      data: BookdetailsById  
+      data: BookdetailsById,
     });
   } catch (error) {
     console.log("Error :", error);
@@ -68,24 +68,46 @@ const addNewBook = async (req, res) => {
   }
 };
 const updateBook = async (req, res) => {
-    
+  try {
+    const updatedBooks=await Book.findByIdAndUpdate(req.params.id,req.body,{
+        new :true
+    });
+    if(!updatedBooks){
+        return res.status(404).json({
+            success:false,
+            message:"Book not Found"
+        })
+    }
+    res.status(200).json({
+        success:true,
+        message:"Book Updated Successfully",
+        data:updatedBooks 
+    })
+  } catch (error) {
+    console.log("Error :", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
 };
 const DeleteBook = async (req, res) => {
-    try {
-        const getCurrentBookId=req.params.id;
-        const deletedBook=await Book.findByIdAndDelete(getCurrentBookId);
-        if(!deletedBook){
-            return res.status(404).json({
-                success:false,
-                message: "Book is NOt Found "
-            })
-        }
-        res.status(200).json({
-            success:true,
-            message:"Book Deleted Successfully",
-            data:deletedBook
-        })
-    } catch (error) {
+  try {
+    const getCurrentBookId = req.params.id;
+    const deletedBook = await Book.findByIdAndDelete(getCurrentBookId);
+    if (!deletedBook) {
+      return res.status(404).json({
+        success: false,
+        message: "Book is NOt Found ",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Book Deleted Successfully",
+      data: deletedBook,
+    });
+  } catch (error) {
     console.log("Error :", error);
     res.status(500).json({
       success: false,
