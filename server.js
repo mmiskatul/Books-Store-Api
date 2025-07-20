@@ -7,7 +7,7 @@ const bookRoutes=require('./Routes/book-routes.js');
 
 const app=express();
 
-const PORT= 3000 ;
+const PORT=process.env.PORT || 3000 ;
 
 
 // connect to the detabase
